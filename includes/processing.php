@@ -8,6 +8,7 @@
  * @package default
  **/
 
+require_once("includes/class.php");
 require_once("includes/config.php");
 
 /**
@@ -29,8 +30,8 @@ require_once("includes/config.php");
 	
 	function buildPage($page, &$content) {
 		if (isset($page)) {
-			$content["page"] .=  "<h2>".$page["title"]."</h2>\n";
-			$content["page"] .=  "<p>".$page["body"]."</p>\n";
+			$content["page"] .=  "<h2>".$page->title."</h2>\n";
+			$content["page"] .=  "<p>".$page->body."</p>\n";
 		} else {
 			global $header;
 			$header = "404";

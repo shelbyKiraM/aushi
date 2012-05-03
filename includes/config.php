@@ -31,7 +31,8 @@
 	 * @return array
 	 * @author Shelby Munsch
 	 */
-	 function directoryToArray($directory, $recursive) {
+	function directoryToArray($directory, $recursive)
+	{
 		$array_items = array();
 		if ($handle = opendir($directory)) {
 			while (false !== ($file = readdir($handle))) {
@@ -52,24 +53,12 @@
 		}
 		return $array_items;
 	}
-	
-	/**
-	 * escapeStringForRegex
-	 *
-	 * @param string $str 
-	 * @return string
-	 * @author Shelby Munsch
-	 */
-	 function escapeStringForRegex($str)
-	{
-		$patterns = array('/\//', '/\^/', '/\./', '/\$/', '/\|/',
-			'/\(/', '/\)/', '/\[/', '/\]/', '/\*/', '/\+/', 
-			'/\?/', '/\{/', '/\}/', '/\,/');
-		$replace = array('\/', '\^', '\.', '\$', '\|', '\(', '\)', 
-			'\[', '\]', '\*', '\+', '\?', '\{', '\}', '\,');
-		return preg_replace($patterns, $replace, $str);
+	function addStylesheet($stylesheet, &$content) {
+		if (file_exists(str_replace($SCRIPT_NAME, "", $SCRIPT_FILENAME)."../css/".$stylesheet)) {
+			$content["head"] .= '<link rel="stylesheet" href="css/'.$stylesheet.'">';
+			return 1;
+		}
 	}
-	
 	/**
 	 * getPages
 	 *
@@ -79,24 +68,11 @@
 	function getPages($files)
 	{
 		foreach ($files as $file) {
-			$ext = pathinfo($file, PATHINFO_EXTENSION);
-			if ($ext == "page") {
-				
-				$page["name"] = str_replace(".".$ext, "", pathinfo($file, PATHINFO_BASENAME));
-				//$page["link"] = pathinfo($file, PATHINFO_BASENAME); // without mod_rewrite
-				$page["link"] = $page["name"];
-				$contents = file($file);
-				$page["body"] = "";
-				foreach ($contents as $id => $line) {
-					if ($id == 0) {
-						$page["title"] = str_replace(array("\r\n", "\n", "\r"), "", $line);
-					} else {
-						$page["body"] .= str_replace(array("\r\n", "\n", "\r"), "<br>\n", $line);
-					}
-				}
-				$pages[$page["name"]] = $page;
-				unset($page);
+			$page = new post($file);
+			if($page->isLoaded) {
+				$pages[$page->name] = $page;
 			}
+			unset($page);
 		}
 		return $pages;
 	}
