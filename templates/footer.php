@@ -1,7 +1,8 @@
 <?
 $content["footer"] .= "<footer>
-	".$copyright."
+	".$copyright.'
 </footer>
-";
-$content["close"] .= "</body>\n</html>\n";
+<script type="text/javascript" src="https://raw.github.com/rthprog/fixie/master/fixie_min.js"></script>
+';
+$content["close"] .= '</body>\n</html>\n';
 ?>
